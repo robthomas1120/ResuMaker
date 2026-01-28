@@ -39,6 +39,13 @@ export function HeaderEditor({ data, onDataChange }: HeaderEditorProps) {
         className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-black"
       />
       <input
+        type="email"
+        value={data.email || ''}
+        onChange={(e) => handleChange('email', e.target.value)}
+        placeholder="Email Address"
+        className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-black"
+      />
+      <input
         type="text"
         value={data.website || ''}
         onChange={(e) => handleChange('website', e.target.value)}

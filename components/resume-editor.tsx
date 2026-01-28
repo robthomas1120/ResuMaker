@@ -118,6 +118,22 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
           </button>
           <button
             onClick={() => {
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = `${data.name?.replace(/\s+/g, '_') || 'resume'}_data.json`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            }}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50"
+          >
+            Export JSON
+          </button>
+          <button
+            onClick={() => {
               const sampleData = {
                 name: "Your Full Name",
                 address: "City, State",

@@ -20,7 +20,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
   const addItem = () => {
     const newData = { ...data };
     const array = newData[type] as any[];
-    
+
     if (type === 'projects') {
       array.push({
         project_title: '',
@@ -42,7 +42,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
         descriptions: [],
       });
     }
-    
+
     onDataChange(newData);
   };
 
@@ -50,6 +50,23 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
     const newData = { ...data };
     const array = newData[type] as any[];
     array.splice(index, 1);
+    onDataChange(newData);
+  };
+
+  const moveItemUp = (index: number) => {
+    if (index === 0) return;
+    const newData = { ...data };
+    const array = newData[type] as any[];
+    [array[index - 1], array[index]] = [array[index], array[index - 1]];
+    onDataChange(newData);
+  };
+
+  const moveItemDown = (index: number) => {
+    const array = data[type] as any[];
+    if (index >= array.length - 1) return;
+    const newData = { ...data };
+    const newArray = newData[type] as any[];
+    [newArray[index], newArray[index + 1]] = [newArray[index + 1], newArray[index]];
     onDataChange(newData);
   };
 
@@ -86,6 +103,36 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
     <div className="space-y-4">
       {items.map((item, itemIdx) => (
         <div key={itemIdx} className="border border-gray-200 rounded p-3 bg-gray-50">
+          {/* Reorder controls */}
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+            <span className="text-sm font-medium text-gray-500">
+              #{itemIdx + 1} of {items.length}
+            </span>
+            <div className="flex gap-1">
+              <button
+                onClick={() => moveItemUp(itemIdx)}
+                disabled={itemIdx === 0}
+                className={`px-2 py-1 text-xs rounded ${itemIdx === 0
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                  }`}
+                title="Move up"
+              >
+                ↑ Up
+              </button>
+              <button
+                onClick={() => moveItemDown(itemIdx)}
+                disabled={itemIdx >= items.length - 1}
+                className={`px-2 py-1 text-xs rounded ${itemIdx >= items.length - 1
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                  }`}
+                title="Move down"
+              >
+                ↓ Down
+              </button>
+            </div>
+          </div>
           {/* Type-specific fields */}
           {type === 'projects' && (
             <>
@@ -122,7 +169,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
                     />
                     <button
                       onClick={() => removeBullet(itemIdx, 'key_features', fidx)}
-                      className="text-red-600 hover:text-red-700 text-sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded text-sm transition-colors"
                     >
                       Remove
                     </button>
@@ -131,7 +178,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
               </div>
               <button
                 onClick={() => addBullet(itemIdx, 'key_features')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-1.5 rounded border border-blue-200 transition-colors inline-block"
               >
                 + Add Feature
               </button>
@@ -166,7 +213,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
                     />
                     <button
                       onClick={() => removeBullet(itemIdx, 'descriptions', didx)}
-                      className="text-red-600 hover:text-red-700 text-sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded text-sm transition-colors"
                     >
                       Remove
                     </button>
@@ -175,7 +222,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
               </div>
               <button
                 onClick={() => addBullet(itemIdx, 'descriptions')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-1.5 rounded border border-blue-200 transition-colors inline-block"
               >
                 + Add Achievement
               </button>
@@ -217,7 +264,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
                     />
                     <button
                       onClick={() => removeBullet(itemIdx, 'descriptions', didx)}
-                      className="text-red-600 hover:text-red-700 text-sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded text-sm transition-colors"
                     >
                       Remove
                     </button>
@@ -226,7 +273,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
               </div>
               <button
                 onClick={() => addBullet(itemIdx, 'descriptions')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-1.5 rounded border border-blue-200 transition-colors inline-block"
               >
                 + Add Honor
               </button>
@@ -235,7 +282,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
 
           <button
             onClick={() => removeItem(itemIdx)}
-            className="text-red-600 hover:text-red-700 text-sm font-medium mt-2"
+            className="w-full mt-3 px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded text-sm font-medium hover:bg-red-100 transition-colors"
           >
             Delete {type === 'work_experience' ? 'Experience' : type === 'education' ? 'Education' : 'Project'}
           </button>
@@ -244,7 +291,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
 
       <button
         onClick={addItem}
-        className="w-full px-3 py-2 bg-black text-white rounded text-sm font-medium hover:bg-gray-800"
+        className="w-full px-4 py-2 bg-black text-white rounded font-medium hover:bg-gray-800 transition-colors shadow-sm"
       >
         + Add {type === 'work_experience' ? 'Experience' : type === 'education' ? 'Education' : 'Project'}
       </button>

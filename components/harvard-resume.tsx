@@ -55,7 +55,7 @@ export const HarvardResume = forwardRef<HTMLDivElement, HarvardResumeProps>(
                 `}} />
 
                 {/* Header - Name */}
-                <div style={{ textAlign: 'center', marginBottom: '4px' }}>
+                <div style={{ textAlign: 'center', marginBottom: '12px' }}>
                     <h1
                         style={{
                             fontSize: '18pt',
@@ -79,10 +79,20 @@ export const HarvardResume = forwardRef<HTMLDivElement, HarvardResumeProps>(
                         paddingBottom: '8px',
                     }}
                 >
-                    {[data.address, data.phone_number ? `P: ${data.phone_number}` : '']
+                    {[data.address, data.phone_number, data.email, data.website]
                         .filter(Boolean)
                         .join(' | ')}
                 </div>
+
+                {/* Summary Section */}
+                {data.short_description && (
+                    <div style={{ marginBottom: '10px' }}>
+                        <SectionHeader>Professional Summary</SectionHeader>
+                        <div style={{ fontSize: '9pt' }}>
+                            {data.short_description}
+                        </div>
+                    </div>
+                )}
 
                 {/* Education Section */}
                 {data.education && data.education.length > 0 && (

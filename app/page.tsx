@@ -8,6 +8,7 @@ export interface ResumeData {
   name: string;
   address: string;
   phone_number: string;
+  email: string;
   website: string;
   short_description: string;
   projects: Array<{
@@ -33,6 +34,7 @@ const DEFAULT_RESUME: ResumeData = {
   name: 'Your Name',
   address: 'City, State',
   phone_number: '',
+  email: '',
   website: '',
   short_description: '',
   projects: [],

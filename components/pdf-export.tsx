@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   header: {
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: 12,
   },
   name: {
     fontSize: 18,
@@ -99,11 +99,19 @@ function ResumeDocument({ data }: { data: ResumeData }) {
         {/* Contact Info */}
         <View style={styles.contactInfo}>
           <Text>
-            {[data.address, data.phone_number ? `P: ${data.phone_number}` : '', data.website]
+            {[data.address, data.phone_number, data.email, data.website]
               .filter(Boolean)
               .join(' | ')}
           </Text>
         </View>
+
+        {/* Summary */}
+        {data.short_description && (
+          <View style={styles.section}>
+            <Text style={styles.sectionHeader}>Professional Summary</Text>
+            <Text style={styles.description}>{data.short_description}</Text>
+          </View>
+        )}
 
         {/* Projects - First */}
         {data.projects && data.projects.length > 0 && (
