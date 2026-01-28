@@ -1,0 +1,73 @@
+{
+    "name": "Rob Thomas Alvarez",
+    "address": "Avida Prime Taft, Pasay, 1306",
+    "phone_number": "09773806856",
+    "short_description": "Data-driven Software Project Manager turned aspiring Data Analyst with experience transforming raw data into actionable insights. Analyzed traffic camera and student performance data using Python, SQL, Power BI, Tableau Prep, and Looker Studio to build clear, impactful dashboards. Strong at translating stakeholder needs into structured solutions, solving complex problems, and supporting data-informed decision-making.",
+    "projects": [],
+    "work_experience": [
+        {
+            "duration": "September 2025 – Present",
+            "position": "Software Project Manager, Wilson Works (MMDA Projects), San Juan",
+            "descriptions": [
+                "Led data-driven projects for MMDA by combining stakeholder coordination with hands-on analytics.",
+                "Analyzed traffic camera data to evaluate system performance and identify areas for improvement.",
+                "Created dashboards and visualizations to communicate insights and optimize operations.",
+                "Bridged project management and data analytics to translate operational needs into actionable insights."
+            ]
+        },
+        {
+            "duration": "July 2025 – September 2025",
+            "position": "Junior Software Project Manager, Media Meter Inc., Quezon City",
+            "descriptions": [
+                "Worked closely with stakeholders to translate business needs into structured, trackable outputs.",
+                "Ensured clarity, accuracy, and alignment between stakeholder requests and delivered solutions.",
+                "Strengthened ability to convert business questions into structured data outputs.",
+                "Supported transition into data analytics and data visualization through analytical task breakdown."
+            ]
+        },
+        {
+            "duration": "January 2025 – April 2025",
+            "position": "Intern Data Analyst, University of Santo Tomas, Manila",
+            "descriptions": [
+                "Performed data analysis and visualization on student performance data across colleges and courses.",
+                "Cleaned and prepared large datasets using Tableau Prep to ensure accuracy and consistency.",
+                "Built interactive dashboards in Looker Studio to visualize performance at college, course, and student levels.",
+                "Conducted drill-down analysis to identify trends, gaps, and insights.",
+                "Provided actionable, data-driven recommendations to faculty.",
+                "Strengthened hands-on skills in data cleaning, visualization, and exploratory data analysis."
+            ]
+        }
+    ],
+    "education": [
+        {
+            "duration": "August 2022 – May 2025",
+            "school": "University of Santo Tomas, Manila",
+            "course": "BS Computer Science",
+            "descriptions": [
+                "Completed a computer science degree with strong emphasis on data analytics, machine learning, and data visualization.",
+                "Honor student with practical exposure to analytics and machine learning concepts.",
+                "Used Python (Pandas, NumPy, Matplotlib) for data cleaning, analysis, and visualization.",
+                "Performed exploratory data analysis (EDA) to identify trends and patterns.",
+                "Developed foundational machine learning models as part of academic projects."
+            ]
+        },
+        {
+            "duration": "August 2019 – May 2021",
+            "school": "University of Santo Tomas, Manila",
+            "course": "Senior High School",
+            "descriptions": [
+                "Gained foundational experience in Python programming.",
+                "Practiced problem-solving and basic data manipulation tasks."
+            ]
+        },
+        {
+            "duration": "August 2015 – May 2019",
+            "school": "University of Santo Tomas, Manila",
+            "course": "Junior High School",
+            "descriptions": [
+                "Learned and applied Microsoft Excel for data organization and calculations.",
+                "Built an early foundation in spreadsheet-based data analysis."
+            ]
+        }
+    ]
+}
