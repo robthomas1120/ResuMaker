@@ -4,7 +4,6 @@ import React, { useRef } from "react"
 
 import { ResumeData } from '@/app/page';
 import { HeaderEditor } from './editors/header-editor';
-import { SummaryEditor } from './editors/summary-editor';
 import { SectionEditor } from './editors/section-editor';
 import { PDFExport } from './pdf-export';
 import { useState } from 'react';
@@ -139,7 +138,6 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
                 address: "City, State",
                 phone_number: "09123456789",
                 website: "linkedin.com/in/yourname",
-                short_description: "Brief professional summary describing your experience and skills.",
                 projects: [
                   {
                     project_title: "Project Name",
@@ -198,12 +196,6 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
           <HeaderEditor data={data} onDataChange={onDataChange} />
         </div>
 
-        {/* Summary */}
-        <div className="border border-gray-200 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-black mb-3">Summary</h3>
-          <SummaryEditor data={data} onDataChange={onDataChange} />
-        </div>
-
         {/* Sections */}
         {getSortedSections().map((section) => (
           <div
@@ -231,6 +223,6 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
           </div>
         ))}
       </div>
-    </div>
+    </div >
   );
 }

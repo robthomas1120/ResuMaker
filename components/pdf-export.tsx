@@ -105,14 +105,6 @@ function ResumeDocument({ data }: { data: ResumeData }) {
           </Text>
         </View>
 
-        {/* Summary */}
-        {data.short_description && (
-          <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Professional Summary</Text>
-            <Text style={styles.description}>{data.short_description}</Text>
-          </View>
-        )}
-
         {/* Projects - First */}
         {data.projects && data.projects.length > 0 && (
           <View style={styles.section}>
