@@ -147,7 +147,7 @@ export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) 
                 type="text"
                 value={item.dataset}
                 onChange={(e) => updateArrayItem(itemIdx, 'dataset', e.target.value)}
-                placeholder="Dataset/Tech Stack"
+                placeholder="Duration"
                 className="w-full px-2 py-1 border border-gray-300 rounded text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-black"
               />
               <textarea
