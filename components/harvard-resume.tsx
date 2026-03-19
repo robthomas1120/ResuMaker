@@ -202,6 +202,26 @@ export const HarvardResume = forwardRef<HTMLDivElement, HarvardResumeProps>(
                         ))}
                     </div>
                 )}
+
+                {/* Skills Section */}
+                {data.skills && data.skills.length > 0 && (
+                    <div style={{ marginBottom: '10px' }}>
+                        <SectionHeader>SKILLS</SectionHeader>
+                        <ul
+                            style={{
+                                margin: '2px 0 0 14px',
+                                padding: 0,
+                                listStyleType: 'disc',
+                            }}
+                        >
+                            {data.skills.map((skill, idx) => (
+                                <li key={idx} style={{ fontSize: '9pt', marginBottom: '1px' }}>
+                                    {skill}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
         );
     }

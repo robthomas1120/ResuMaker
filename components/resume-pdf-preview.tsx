@@ -184,6 +184,20 @@ function ResumeDocument({ data }: { data: ResumeData }) {
             ))}
           </View>
         )}
+
+        {/* Skills - After Education */}
+        {data.skills && data.skills.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionHeader}>SKILLS</Text>
+            <View style={styles.bulletList}>
+              {data.skills.map((skill, idx) => (
+                <Text key={idx} style={styles.bulletItem}>
+                  • {skill}
+                </Text>
+              ))}
+            </View>
+          </View>
+        )}
       </Page>
     </Document>
   );

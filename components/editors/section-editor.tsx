@@ -10,6 +10,56 @@ interface SectionEditorProps {
 }
 
 export function SectionEditor({ type, data, onDataChange }: SectionEditorProps) {
+  // ── Skills (flat string[]) ──────────────────────────────────────────────
+  if (type === 'skills') {
+    const skills = data.skills ?? [];
+
+    const addSkill = () => {
+      onDataChange({ ...data, skills: [...skills, ''] });
+    };
+
+    const updateSkill = (idx: number, value: string) => {
+      const updated = [...skills];
+      updated[idx] = value;
+      onDataChange({ ...data, skills: updated });
+    };
+
+    const removeSkill = (idx: number) => {
+      const updated = [...skills];
+      updated.splice(idx, 1);
+      onDataChange({ ...data, skills: updated });
+    };
+
+    return (
+      <div className="space-y-2">
+        {skills.map((skill, idx) => (
+          <div key={idx} className="flex gap-2">
+            <input
+              type="text"
+              value={skill}
+              onChange={(e) => updateSkill(idx, e.target.value)}
+              placeholder="Skill (e.g., JavaScript, Python, Figma…)"
+              className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            />
+            <button
+              onClick={() => removeSkill(idx)}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded text-sm transition-colors"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={addSkill}
+          className="w-full px-4 py-2 bg-black text-white rounded font-medium hover:bg-gray-800 transition-colors shadow-sm"
+        >
+          + Add Skill
+        </button>
+      </div>
+    );
+  }
+
+  // ── Other sections (array of objects) ──────────────────────────────────
   const updateArrayItem = (index: number, field: string, value: string | string[]) => {
     const newData = { ...data };
     const array = newData[type] as any[];

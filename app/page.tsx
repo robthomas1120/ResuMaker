@@ -27,6 +27,7 @@ export interface ResumeData {
     course: string;
     descriptions: string[];
   }>;
+  skills: string[];
 }
 
 const DEFAULT_RESUME: ResumeData = {
@@ -38,6 +39,7 @@ const DEFAULT_RESUME: ResumeData = {
   projects: [],
   work_experience: [],
   education: [],
+  skills: [],
 };
 
 export default function Page() {

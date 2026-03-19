@@ -13,7 +13,7 @@ interface ResumeEditorProps {
   onDataChange: (data: ResumeData) => void;
 }
 
-export type SectionType = 'projects' | 'work_experience' | 'education';
+export type SectionType = 'projects' | 'work_experience' | 'education' | 'skills';
 
 interface SectionConfig {
   type: SectionType;
@@ -26,11 +26,12 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
     { type: 'projects', label: 'Projects', order: 0 },
     { type: 'work_experience', label: 'Work Experience', order: 1 },
     { type: 'education', label: 'Education', order: 2 },
+    { type: 'skills', label: 'Skills', order: 3 },
   ]);
 
   const [draggedSection, setDraggedSection] = useState<SectionType | null>(null);
   const [visibleSections, setVisibleSections] = useState<Set<SectionType>>(
-    new Set(['projects', 'work_experience', 'education'])
+    new Set(['projects', 'work_experience', 'education', 'skills'])
   );
 
   const handleDragStart = (section: SectionType) => {
@@ -169,6 +170,11 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
                       "GPA or honors"
                     ]
                   }
+                ],
+                skills: [
+                  "Skill 1 (e.g., JavaScript)",
+                  "Skill 2 (e.g., Python)",
+                  "Skill 3 (e.g., Figma)"
                 ]
               };
               const blob = new Blob([JSON.stringify(sampleData, null, 2)], { type: 'application/json' });
