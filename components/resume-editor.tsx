@@ -34,6 +34,24 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
     new Set(['projects', 'work_experience', 'education', 'skills'])
   );
 
+  // ── Save / dirty tracking ──────────────────────────────────────────────
+  const [fileHandle, setFileHandle] = useState<FileSystemFileHandle | null>(null);
+  // Snapshot of the last-imported or last-saved JSON — initialized from initial data
+  const [lastSavedJson, setLastSavedJson] = useState<string>(() => JSON.stringify(data));
+  const currentJson = JSON.stringify(data);
+  const hasUnsavedChanges = currentJson !== lastSavedJson;
+
+  // Warn before closing/refreshing when there are unsaved changes
+  React.useEffect(() => {
+    if (!hasUnsavedChanges) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [hasUnsavedChanges]);
+
   const handleDragStart = (section: SectionType) => {
     setDraggedSection(section);
   };
@@ -76,8 +94,31 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
       .sort((a, b) => a.order - b.order);
   };
 
+  // ── Import JSON ────────────────────────────────────────────────────────
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // File System Access API path (Chrome/Edge) — gives us a writable handle
+  const handleImportWithPicker = async () => {
+    try {
+      const [handle] = await (window as any).showOpenFilePicker({
+        types: [{ description: 'JSON Files', accept: { 'application/json': ['.json'] } }],
+        multiple: false,
+      });
+      const file: File = await handle.getFile();
+      const content = await file.text();
+      const importedData = JSON.parse(content) as ResumeData;
+      onDataChange(importedData);
+      setFileHandle(handle);
+      setLastSavedJson(JSON.stringify(importedData));
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        alert('Could not open file. Please try again.');
+        console.error(err);
+      }
+    }
+  };
+
+  // Fallback for browsers without File System Access API
   const handleJsonImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -88,21 +129,76 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
         const content = e.target?.result as string;
         const importedData = JSON.parse(content) as ResumeData;
         onDataChange(importedData);
+        // No file handle available in fallback mode → Save won't appear
+        setFileHandle(null);
+        setLastSavedJson(JSON.stringify(importedData));
       } catch (error) {
         alert('Invalid JSON file. Please check the format.');
         console.error(error);
       }
     };
     reader.readAsText(file);
-    // Reset input so same file can be imported again
     event.target.value = '';
+  };
+
+  const handleImportClick = () => {
+    if ('showOpenFilePicker' in window) {
+      handleImportWithPicker();
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
+
+  // ── Save (overwrite imported file or export new) ────────────────────────────────────
+  const handleSave = async () => {
+    // If we don't have a writable file handle (fallback or new file), just export it like regular save
+    if (!fileHandle) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${data.name?.replace(/\s+/g, '_') || 'resume'}_data.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setLastSavedJson(JSON.stringify(data));
+      return;
+    }
+
+    try {
+      // In some security contexts Chrome forces "Save As" when calling createWritable on an open handle.
+      // Calling showSaveFilePicker with the suggested file handle ensures we overwrite the existing file.
+      const saveHandle = await (window as any).showSaveFilePicker({
+        suggestedName: fileHandle.name,
+        types: [{ description: 'JSON Files', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await saveHandle.createWritable();
+      const content = JSON.stringify(data, null, 2);
+      await writable.write(content);
+      await writable.close();
+      setFileHandle(saveHandle); // Update handle in case they chose a new file
+      setLastSavedJson(JSON.stringify(data));
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        alert('Failed to save file. Please try again.');
+        console.error(err);
+      }
+    }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-black">Resume Editor</h2>
-        <div className="flex gap-2">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 whitespace-nowrap">
+          <h2 className="text-2xl font-bold text-black">Resume Editor</h2>
+          {hasUnsavedChanges && (
+            <span className="text-xs font-medium text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shrink-0">
+              ● Unsaved
+            </span>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
           <input
             ref={fileInputRef}
             type="file"
@@ -111,11 +207,24 @@ export function ResumeEditor({ data, onDataChange }: ResumeEditorProps) {
             className="hidden"
           />
           <button
-            onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50"
+            onClick={handleImportClick}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50 shrink-0"
           >
             Import JSON
           </button>
+
+          <button
+            onClick={handleSave}
+            disabled={!hasUnsavedChanges}
+            className={`px-4 py-2 rounded text-sm font-medium transition-colors shrink-0 ${
+              hasUnsavedChanges
+                ? 'bg-green-600 text-white hover:bg-green-700 shadow-sm'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            Save
+          </button>
+
           <button
             onClick={() => {
               const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
