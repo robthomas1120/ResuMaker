@@ -158,7 +158,7 @@ function ResumeDocument({ data }: { data: ResumeData }) {
           </View>
         )}
 
-        {/* Education - Last */}
+        {/* Education */}
         {data.education && data.education.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionHeader}>EDUCATION</Text>
@@ -182,6 +182,20 @@ function ResumeDocument({ data }: { data: ResumeData }) {
                 )}
               </View>
             ))}
+          </View>
+        )}
+
+        {/* Skills - Last */}
+        {data.skills && data.skills.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionHeader}>SKILLS</Text>
+            <View style={styles.bulletList}>
+              {data.skills.map((skill, idx) => (
+                <Text key={idx} style={styles.bulletItem}>
+                  • {skill}
+                </Text>
+              ))}
+            </View>
           </View>
         )}
       </Page>
